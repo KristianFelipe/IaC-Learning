@@ -29,6 +29,13 @@ resource "azurerm_subnet" "env1" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
+resource "azurerm_public_ip" "env1" {
+  name                = "env1-public-ip"
+  resource_group_name = azurerm_resource_group.env1.name
+  location            = azurerm_resource_group.env1.location
+  allocation_method   = "Dynamic"
+  sku                 = "Standard"
+  }
 
 
 
@@ -46,6 +53,7 @@ resource "azurerm_network_interface" "env1" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.env1.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.env1.id
   }
 }
 
