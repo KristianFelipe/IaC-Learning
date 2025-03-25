@@ -67,7 +67,7 @@ resource "azurerm_linux_virtual_machine" "env1" {
     azurerm_network_interface.env1.id,
   ]
 
-  admin_password                  = azurerm_key_vault_secret.
+  admin_password                  = azurerm_key_vault_secret.env1vm_password_secret.value
   disable_password_authentication = false
 
 
