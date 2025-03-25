@@ -67,7 +67,7 @@ resource "azurerm_linux_virtual_machine" "env1" {
     azurerm_network_interface.env1.id,
   ]
 
-  admin_password                  = "Password5537!"
+  admin_password                  = azurerm_key_vault_secret.
   disable_password_authentication = false
 
 
@@ -114,3 +114,43 @@ resource "azurerm_network_security_group" "env1" {
   network_security_group_id = azurerm_network_security_group.env1.id
 }
 
+
+
+#################################################
+#                   Key Vault                   #
+#################################################
+
+resource "azurerm_key_vault" "env1" {
+  name                        = "env1-keyvault"
+  location                    = azurerm_resource_group.env1.location
+  resource_group_name         = azurerm_resource_group.env1.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = "standard"
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    secret_permissions = [
+      "get",
+      "set",
+      "list",
+    ]
+  }
+}
+
+
+
+# Generate random password
+resource "random_password" "env1_vm_password" {
+  length  = 20
+  special = true
+}
+
+
+# Store password in Key Vault
+resource "azurerm_key_vault_secret" "env1vm_password_secret" {
+  name         = "env1-vm-admin-password"
+  value        = random_password.env1_vm_password.result
+  key_vault_id = azurerm_key_vault.env1.id
+}
