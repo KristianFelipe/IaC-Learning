@@ -33,7 +33,7 @@ resource "azurerm_public_ip" "env1" {
   name                = "env1-public-ip"
   resource_group_name = azurerm_resource_group.env1.name
   location            = azurerm_resource_group.env1.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   sku                 = "Standard"
   }
 
