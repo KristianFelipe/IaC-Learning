@@ -35,7 +35,7 @@ resource "azurerm_public_ip" "env1" {
   location            = azurerm_resource_group.env1.location
   allocation_method   = "Static"
   sku                 = "Standard"
-  }
+}
 
 
 
@@ -107,9 +107,9 @@ resource "azurerm_network_security_group" "env1" {
     destination_address_prefix = "*"
   }
 
-  }
+}
 
-  resource "azurerm_network_interface_security_group_association" "env1" {
+resource "azurerm_network_interface_security_group_association" "env1" {
   network_interface_id      = azurerm_network_interface.env1.id
   network_security_group_id = azurerm_network_security_group.env1.id
 }
@@ -121,25 +121,13 @@ resource "azurerm_network_security_group" "env1" {
 #################################################
 
 resource "azurerm_key_vault" "env1" {
-  name                        = "env1-keyvault"
-  location                    = azurerm_resource_group.env1.location
-  resource_group_name         = azurerm_resource_group.env1.name
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  sku_name                    = "standard"
-
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    secret_permissions = [
-      "get",
-      "set",
-      "list",
-    ]
-  }
+  name                      = "env1-keyvault"
+  location                  = azurerm_resource_group.env1.location
+  resource_group_name       = azurerm_resource_group.env1.name
+  tenant_id                 = data.azurerm_client_config.current.tenant_id
+  sku_name                  = "standard"
+  enable_rbac_authorization = true
 }
-
-
 
 # Generate random password
 resource "random_password" "env1_vm_password" {
@@ -154,3 +142,11 @@ resource "azurerm_key_vault_secret" "env1vm_password_secret" {
   value        = random_password.env1_vm_password.result
   key_vault_id = azurerm_key_vault.env1.id
 }
+
+
+resource "azurerm_role_assignment" "env1" {
+  principal_id         = "48d4d789-f15a-44a6-ba26-c0e232b82e41" # The object ID of the user, service principal, or group
+  role_definition_name = "Key Vault Reader"                     # Role to assign
+  scope                = azurerm_key_vault.env1.id              # The scope (could be a resource group, subscription, etc.)
+}
+
