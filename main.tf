@@ -150,7 +150,7 @@ resource "azurerm_key_vault_secret" "env1vm_password_secret" {
 
 resource "azurerm_role_assignment" "env1" {
   principal_id         = "48d4d789-f15a-44a6-ba26-c0e232b82e41" # The object ID of the user, service principal, or group
-  role_definition_name = "Key Vault Reader"                     # Role to assign
+  role_definition_name = "Key Vault Secrets User"                     # Role to assign
   scope                = azurerm_key_vault.env1.id              # The scope (could be a resource group, subscription, etc.)
 }
 
