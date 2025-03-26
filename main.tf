@@ -208,7 +208,7 @@ resource "azurerm_subnet" "env2" {
 }
 
 resource "azurerm_public_ip" "env2" {
-  name                = "env1-public-ip"
+  name                = "env2-public-ip"
   resource_group_name = azurerm_resource_group.env2.name
   location            = azurerm_resource_group.env2.location
   allocation_method   = "Static"
@@ -219,7 +219,7 @@ resource "azurerm_public_ip" "env2" {
 
 
 #########################################
-#                   VM and NIC          #
+#                   VM and NIC          # 
 #########################################
 
 resource "azurerm_network_interface" "env2" {
