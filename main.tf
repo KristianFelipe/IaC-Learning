@@ -89,6 +89,12 @@ resource "azurerm_linux_virtual_machine" "env1" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+
+provisioner "local-exec" {
+    command = "sudo apt install neofetch"
+  }
+
+
 }
 
 
@@ -260,7 +266,13 @@ resource "azurerm_linux_virtual_machine" "env2" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+  provisioner "local-exec" {
+    command = "sudo apt install neofetch'"
+  }
 }
+
+
+
 
 
 
