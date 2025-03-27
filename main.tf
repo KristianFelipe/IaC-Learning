@@ -90,6 +90,10 @@ resource "azurerm_linux_virtual_machine" "env1" {
     version   = "latest"
   }
 
+  provisioner "local-exec" {
+    command = "Sudo apt install neofetch -y"
+  }
+
 
 }
 
@@ -261,6 +265,10 @@ resource "azurerm_linux_virtual_machine" "env2" {
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts"
     version   = "latest"
+  }
+
+  provisioner "local-exec" {
+    command = "Sudo apt install neofetch -y"
   }
 
 }
